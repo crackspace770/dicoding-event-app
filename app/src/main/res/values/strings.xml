@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Dicoding Event</string>
+    <string name="something_wrong">Something wrong, check your connection</string>
+</resources>
