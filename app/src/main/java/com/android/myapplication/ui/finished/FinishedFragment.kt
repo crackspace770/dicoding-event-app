@@ -19,7 +19,7 @@ import com.android.myapplication.databinding.FragmentFinishedBinding
 import com.android.myapplication.ui.home.HomeViewModel
 import com.android.myapplication.data.Result
 
-class FinishedFragment:Fragment() {
+class FinishedFragment : Fragment() {
 
     private lateinit var binding: FragmentFinishedBinding
 
@@ -30,8 +30,7 @@ class FinishedFragment:Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFinishedBinding.inflate(inflater, container, false)
@@ -43,12 +42,13 @@ class FinishedFragment:Fragment() {
 
         setHasOptionsMenu(true)
 
-
         rvSearch()
         observeSearchResult()
 
+        // Show initial state message by default
+        binding.onInitialSearchStateMessage.visibility = View.VISIBLE
+        binding.rvCard.visibility = View.GONE
     }
-
 
     private fun rvSearch() {
         binding.rvCard.apply {
@@ -87,24 +87,29 @@ class FinishedFragment:Fragment() {
                             viewError.root.visibility = View.GONE
                             viewEmpty.root.visibility = View.GONE
                             onInitialSearchStateMessage.visibility = View.GONE
+                            rvCard.visibility = View.VISIBLE
                             rvCard.scrollToPosition(0)
                         }
                         viewModel.setSearchQuery(query)
                         observeSearchResult()
-                    } else if (query.equals("")) {
-
+                    } else {
+                        binding.apply {
+                            progressBar.visibility = View.GONE
+                            viewError.root.visibility = View.GONE
+                            viewEmpty.root.visibility = View.GONE
+                            onInitialSearchStateMessage.visibility = View.VISIBLE
+                            rvCard.visibility = View.GONE
+                        }
                     }
                     return true
-
                 }
-            } )
+            })
         }
-
     }
 
     private fun observeSearchResult() {
         binding.apply {
-            viewModel.searchResult.observe(requireActivity()) { results ->
+            viewModel.searchResult.observe(viewLifecycleOwner) { results ->
                 if (results != null) {
                     when (results) {
                         is Result.Loading -> {
@@ -118,6 +123,8 @@ class FinishedFragment:Fragment() {
                             if (searchResult.isEmpty()) {
                                 viewEmpty.root.visibility = View.VISIBLE
                                 onInitialSearchStateMessage.visibility = View.GONE
+                            } else {
+                                viewEmpty.root.visibility = View.GONE
                             }
                         }
                         is Result.Error -> {
@@ -129,5 +136,4 @@ class FinishedFragment:Fragment() {
             }
         }
     }
-
 }

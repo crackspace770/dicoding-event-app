@@ -21,7 +21,7 @@ class ActiveAdapter:ListAdapter<ListEvent, ActiveAdapter.ViewHolder>(DIFF_CALLBA
             binding.apply {
 
                 Glide.with(itemView.context)
-                    .load(data.mediaCover)
+                    .load(data.imageLogo)
                     .centerCrop()
                     .into(imgEvent)
                 tvEventName.text = data.name

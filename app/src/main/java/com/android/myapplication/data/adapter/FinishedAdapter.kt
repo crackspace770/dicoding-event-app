@@ -21,7 +21,7 @@ class FinishedAdapter:ListAdapter<ListEvent, FinishedAdapter.ViewHolder>(DIFF_CA
                 tvOwner.text = data.ownerName
 
                 Glide.with(itemView.context)
-                    .load(data.mediaCover)
+                    .load(data.imageLogo)
                     .into(imgEvent)
 
                 itemView.setOnClickListener {

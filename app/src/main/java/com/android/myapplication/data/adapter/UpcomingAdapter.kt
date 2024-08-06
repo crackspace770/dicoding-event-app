@@ -21,7 +21,7 @@ class UpcomingAdapter:ListAdapter<ListEvent, UpcomingAdapter.ViewHolder>(DIFF_CA
            binding.apply {
 
                Glide.with(itemView.context)
-                   .load(data.mediaCover)
+                   .load(data.imageLogo)
                    .centerCrop()
                    .into(imgEvent)
                tvNameEvents.text = data.name
