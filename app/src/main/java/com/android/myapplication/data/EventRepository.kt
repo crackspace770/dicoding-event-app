@@ -4,13 +4,15 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.android.myapplication.data.api.ApiService
-import com.android.myapplication.data.response.ListEvent
+import com.android.myapplication.data.local.EventDao
+import com.android.myapplication.data.local.EventEntity
 
 class EventRepository(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val eventDao:EventDao
 ) {
 
-    fun searchEvent(query: String): LiveData<Result<List<ListEvent>>> = liveData {
+    fun searchEvent(query: String): LiveData<Result<List<EventEntity>>> = liveData {
         emit(Result.Loading)
         try {
             val response = apiService.getSearch(query)
@@ -26,7 +28,7 @@ class EventRepository(
         }
     }
 
-    fun eventActive(): LiveData<Result<List<ListEvent>>> = liveData {
+    fun eventActive(): LiveData<Result<List<EventEntity>>> = liveData {
         emit(Result.Loading)
         try {
             val response = apiService.getActiveEvent()
@@ -42,23 +44,7 @@ class EventRepository(
         }
     }
 
-    fun eventFinished(): LiveData<Result<List<ListEvent>>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.getFinishedEvent()
-            if (response.isSuccessful) {
-                val finishedEvents = response.body()?.listEvents ?: emptyList()
-                emit(Result.Success(finishedEvents))
-            } else {
-                emit(Result.Error("Error: ${response.code()} ${response.message()}"))
-            }
-        } catch (e: Exception) {
-            Log.e("EventRepository", "eventFinished: ${e.message.toString()}")
-            emit(Result.Error(e.message.toString()))
-        }
-    }
-
-    fun allEvent(): LiveData<Result<List<ListEvent>>> = liveData {
+    fun allEvent(): LiveData<Result<List<EventEntity>>> = liveData {
         emit(Result.Loading)
         try {
             val response = apiService.getAllEvents()
@@ -73,5 +59,24 @@ class EventRepository(
             emit(Result.Error(e.message.toString()))
         }
     }
+
+    fun getBookmarkedEvent(): LiveData<List<EventEntity>> {
+        return eventDao.getBookmarkedEvent()
+    }
+
+    suspend fun saveEvent(event: EventEntity) {
+        eventDao.saveEvent(event)
+    }
+
+    suspend fun deleteEvent(title: String) {
+        eventDao.deleteEvent(title)
+    }
+
+    fun isEventBookmarked(title: String): LiveData<Boolean> {
+        return eventDao.isEventBookmarked(title)
+    }
+
+
+
 
 }

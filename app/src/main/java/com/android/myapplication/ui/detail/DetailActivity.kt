@@ -8,14 +8,21 @@ import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import android.webkit.WebViewClient
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.android.myapplication.data.response.ListEvent
+import androidx.core.content.ContextCompat
+import com.android.myapplication.R
+import com.android.myapplication.data.factory.ViewModelFactory
+import com.android.myapplication.data.local.EventEntity
 import com.android.myapplication.databinding.ActivityDetailBinding
 import com.bumptech.glide.Glide
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
+    private val viewModel: DetailViewModel by viewModels {
+        ViewModelFactory.getInstance(this)
+    }
 
     @SuppressLint("SetJavaScriptEnabled", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +30,10 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val event = intent.getParcelableExtra<ListEvent>(EXTRA_EVENT)
+        setSupportActionBar(binding.myToolbar.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        val event = intent.getParcelableExtra<EventEntity>(EXTRA_EVENT)
 
         binding.apply {
             event?.let {
@@ -59,18 +69,38 @@ class DetailActivity : AppCompatActivity() {
                 }
 
             }
+
+            if (event != null) {
+                viewModel.setEventData(event)
+            }
+
+            binding.myToolbar.btnBookmark.setOnClickListener {
+                if (event != null) {
+                    viewModel.changeBookmark(event)
+                }
+            }
+
+            viewModel.bookmarkStatus.observe(this@DetailActivity) {status->
+                setBookmarkState(status)
+            }
+
+            myToolbar.btnBackToolbar.setOnClickListener {
+                finish()
+            }
+
         }
 
-        setupToolbar()
     }
 
-    private fun setupToolbar() {
-        setSupportActionBar(binding.myToolbar.toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        binding.myToolbar.btnBackToolbar.setOnClickListener {
-            finish()
+    private fun setBookmarkState(state: Boolean) {
+        val bookmarkItem = binding.myToolbar.btnBookmark
+        if (state) {
+            bookmarkItem.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.baseline_bookmark_24))
+        } else {
+            bookmarkItem.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.baseline_bookmark_border))
         }
     }
+
 
     private fun createBoldText(prefix: String, boldText: String): SpannableStringBuilder {
         return SpannableStringBuilder().apply {

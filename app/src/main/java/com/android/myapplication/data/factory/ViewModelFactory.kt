@@ -6,10 +6,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.android.myapplication.data.EventRepository
 import com.android.myapplication.data.di.Injection
 import com.android.myapplication.ui.active.ActiveViewModel
+import com.android.myapplication.ui.detail.DetailViewModel
 import com.android.myapplication.ui.finished.FinishedViewModel
 import com.android.myapplication.ui.home.HomeViewModel
+import com.android.myapplication.data.preference.SettingPreference
+import com.android.myapplication.ui.setting.SettingViewModel
 
-class ViewModelFactory constructor(private val repository: EventRepository) :
+class ViewModelFactory(private val repository: EventRepository, private val pref: SettingPreference) :
     ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
@@ -24,7 +27,13 @@ class ViewModelFactory constructor(private val repository: EventRepository) :
             modelClass.isAssignableFrom(FinishedViewModel::class.java) -> {
                 FinishedViewModel(repository) as T
             }
-            else -> throw  IllegalArgumentException("Unknown ViewModel Class: ${modelClass.name}")
+            modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
+                DetailViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(SettingViewModel::class.java) -> {
+                SettingViewModel(pref) as T
+            }
+            else -> throw IllegalArgumentException("Unknown ViewModel Class: ${modelClass.name}")
         }
     }
 
@@ -33,7 +42,9 @@ class ViewModelFactory constructor(private val repository: EventRepository) :
 
         fun getInstance(context: Context): ViewModelFactory {
             return instance ?: synchronized(this) {
-                instance ?: ViewModelFactory(Injection.provideRepository()).also { instance = it }
+                val repository = Injection.provideRepository(context)
+                val pref = Injection.provideSettingPreference(context)
+                instance ?: ViewModelFactory(repository, pref).also { instance = it }
             }
         }
     }

@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.bottomNavView
         navView.setupWithNavController(navController)
 
-        // Removing setupActionBarWithNavController call as before
+
     }
 }
 

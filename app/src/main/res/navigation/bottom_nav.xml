@@ -16,5 +16,9 @@
         android:id="@+id/activeFragment"
         android:name="com.android.myapplication.ui.active.ActiveFragment"
         android:label="ActiveFragment" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.android.myapplication.ui.setting.SettingFragment"
+        android:label="SettingFragment" />
 
 </navigation>

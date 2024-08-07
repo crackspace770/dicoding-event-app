@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.myapplication.data.response.ListEvent
+import com.android.myapplication.data.local.EventEntity
 import com.android.myapplication.databinding.ItemFinishedBinding
 import com.android.myapplication.ui.detail.DetailActivity
 import com.bumptech.glide.Glide
 
-class FinishedAdapter:ListAdapter<ListEvent, FinishedAdapter.ViewHolder>(DIFF_CALLBACK) {
+class FinishedAdapter:ListAdapter<EventEntity, FinishedAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     class ViewHolder(private val binding:ItemFinishedBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(data:ListEvent) {
+        fun bind(data:EventEntity) {
             binding.apply {
                 tvEventName.text = data.name
                 tvOwner.text = data.ownerName
@@ -44,17 +44,17 @@ class FinishedAdapter:ListAdapter<ListEvent, FinishedAdapter.ViewHolder>(DIFF_CA
     }
 
     companion object {
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<ListEvent> =
-            object : DiffUtil.ItemCallback<ListEvent>() {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<EventEntity> =
+            object : DiffUtil.ItemCallback<EventEntity>() {
 
 
-                override fun areItemsTheSame(oldItem: ListEvent, storyItem: ListEvent): Boolean {
+                override fun areItemsTheSame(oldItem: EventEntity, storyItem: EventEntity): Boolean {
                     return oldItem.id == storyItem.id
                 }
 
 
                 @SuppressLint("DiffUtilEquals")
-                override fun areContentsTheSame(oldItem: ListEvent, storyItem: ListEvent): Boolean {
+                override fun areContentsTheSame(oldItem: EventEntity, storyItem: EventEntity): Boolean {
                     return oldItem == storyItem
                 }
             }

@@ -21,7 +21,6 @@ class HomeFragment:Fragment() {
     private val upcomingAdapter = UpcomingAdapter()
     private val finishedAdapter = FinishedAdapter()
 
-
     private val viewModel: HomeViewModel by viewModels {
         ViewModelFactory.getInstance(requireActivity())
     }
