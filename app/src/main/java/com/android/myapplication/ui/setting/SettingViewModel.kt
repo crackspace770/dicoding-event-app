@@ -13,9 +13,19 @@ class SettingViewModel(private val pref: SettingPreference):ViewModel() {
         return pref.getThemeSetting().asLiveData()
     }
 
+    fun getNotificationSettings(): LiveData<Boolean> { // New method for notification
+        return pref.getNotificationSetting().asLiveData()
+    }
+
     fun saveThemeSetting(isDarkModeActive: Boolean) {
         viewModelScope.launch {
             pref.saveThemeSetting(isDarkModeActive)
+        }
+    }
+
+    fun saveNotificationSetting(isNotificationActive: Boolean) { // New method for notification
+        viewModelScope.launch {
+            pref.saveNotificationSetting(isNotificationActive)
         }
     }
 

@@ -34,7 +34,7 @@
             android:layout_marginTop="16dp"
             android:maxLines="3"
             android:text="Nama Event"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textStyle="bold"
             card_view:layout_constraintStart_toEndOf="@+id/imgEvent"
             card_view:layout_constraintTop_toTopOf="parent" />

@@ -3,5 +3,6 @@
     <string name="something_wrong">Something wrong, check your connection</string>
     <string name="no_data">No Data</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="notification">Notification</string>
     <string name="setting">Setting</string>
 </resources>

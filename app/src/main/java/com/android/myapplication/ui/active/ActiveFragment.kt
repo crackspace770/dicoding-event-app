@@ -35,15 +35,8 @@ class ActiveFragment:Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getBookmarkedEvent().observe(viewLifecycleOwner) { bookmarkedEvent ->
-            activeAdapter.submitList(bookmarkedEvent)
-            binding.progressBar.visibility = View.GONE
-            binding.viewError.tvError.text = getString(R.string.no_data)
-            binding.viewError.root.visibility =
-                if (bookmarkedEvent.isNotEmpty()) View.GONE else View.VISIBLE
-        }
-
         rvBookmark()
+        observeViewModel()
 
     }
 
@@ -51,6 +44,17 @@ class ActiveFragment:Fragment() {
         binding.rvFavorite.apply {
             adapter = activeAdapter // Change this line
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        }
+    }
+
+    private fun observeViewModel() {
+
+        viewModel.getBookmarkedEvent().observe(viewLifecycleOwner) { bookmarkedEvent ->
+            activeAdapter.submitList(bookmarkedEvent)
+            binding.progressBar.visibility = View.GONE
+            binding.viewError.tvError.text = getString(R.string.no_data)
+            binding.viewError.root.visibility =
+                if (bookmarkedEvent.isNotEmpty()) View.GONE else View.VISIBLE
         }
     }
 

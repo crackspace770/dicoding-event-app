@@ -41,7 +41,7 @@
             android:maxLines="2"
             android:text="Nama Event"
             android:textStyle="bold"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textAlignment="center"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"

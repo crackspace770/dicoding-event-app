@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.android.myapplication.R
 import com.android.myapplication.data.factory.ViewModelFactory
+import com.android.myapplication.data.worker.NotificationUtils
 import com.android.myapplication.databinding.FragmentSettingBinding
 
 class SettingFragment : Fragment() {
@@ -32,7 +33,7 @@ class SettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Set the title on the ActionBar
-        (requireActivity() as AppCompatActivity).supportActionBar?.title = getString(R.string.setting)
+       // (requireActivity() as AppCompatActivity).supportActionBar?.title = getString(R.string.setting)
 
         viewModel.getThemeSettings().observe(viewLifecycleOwner) { isDarkModeActive: Boolean ->
             if (isDarkModeActive) {
@@ -44,8 +45,24 @@ class SettingFragment : Fragment() {
             }
         }
 
+        viewModel.getNotificationSettings().observe(viewLifecycleOwner) { isNotificationActive: Boolean->
+            binding.switchNotification.isChecked = isNotificationActive
+        }
+
         binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
             viewModel.saveThemeSetting(isChecked)
         }
+
+
+        binding.switchNotification.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.saveNotificationSetting(isChecked)
+            // Update notification scheduling based on the preference
+            if (isChecked) {
+                NotificationUtils.scheduleDailyNotification(requireContext())
+            } else {
+                NotificationUtils.cancelNotifications(requireContext())
+            }
+        }
+
     }
 }

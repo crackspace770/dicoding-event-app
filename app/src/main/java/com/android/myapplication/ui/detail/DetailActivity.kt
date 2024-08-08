@@ -33,6 +33,12 @@ class DetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.myToolbar.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        setDetailData()
+
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun setDetailData() {
         val event = intent.getParcelableExtra<EventEntity>(EXTRA_EVENT)
 
         binding.apply {

@@ -25,6 +25,7 @@ class ActiveAdapter:ListAdapter<EventEntity, ActiveAdapter.ViewHolder>(DIFF_CALL
                     .centerCrop()
                     .into(imgEvent)
                 tvEventName.text = data.name
+                tvOwner.text = data.ownerName
 
                 itemView.setOnClickListener {
                     val intentDetail = Intent(itemView.context, DetailActivity::class.java)
